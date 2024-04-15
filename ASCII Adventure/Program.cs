@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace ASCII_Adventure {
     public class Program {
         static void Main(string[] args) {
-            Console.WriteLine("ascii");
+            new Run().StartGame();
         }
     }
 }
