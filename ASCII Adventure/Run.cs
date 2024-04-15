@@ -11,10 +11,12 @@ namespace ASCII_Adventure {
 
             Map map = new Map();
             Player player = new Player();
+            Console.CursorVisible = false;
 
 
             while (true) {
 
+                ConsoleKey? keyInput = player.KeyboardInput();
 
                 player.Draw();
             }
