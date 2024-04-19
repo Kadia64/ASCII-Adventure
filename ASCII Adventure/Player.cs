@@ -5,87 +5,116 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ASCII_Adventure {
-    public class Player {
+    public class Player : ConsoleManager {
 
         public int posX = 0;
         public int posY = 0;
+        public int arrayX, arrayY;        
+        public Vect MapPosition { get; set; }
+        public Vect ConsolePosition { get; set; }
+        public Vect Array2DPosition { get; set; }
+        public Vect PlayerSpawnOffset;
         public char PlayerLeft = '<';
         public char PlayerRight = '>';
         public char PlayerUp = '^';
         public char PlayerDown = 'v';
+        public Direction currentDirection;
+        public bool hasMoved = false;
         private ConsoleKey currentKeyPressed;
-        private Direction currentDirection;
         private int StartX, StartY;
-
-        public Player() {
-            StartX = 5;
-            StartY = 10;
+        public Player(Vect playerSpawn, Vect mapStartPosition) {
+            PlayerSpawnOffset = playerSpawn;
+            StartX = mapStartPosition.X + playerSpawn.X;
+            StartY = mapStartPosition.Y + playerSpawn.Y;
+            MapPosition = new Vect(posX, posY);
+            ConsolePosition = new Vect(mapStartPosition.X, mapStartPosition.Y);
+            Array2DPosition = new Vect(playerSpawn.X - 1, playerSpawn.Y);
         }
         public void Draw() {
-
-            Pos(posX, posY);            
+            MapPosition.X = posX;
+            MapPosition.Y = posY;
+            ConsolePosition.X = StartX + posX;
+            ConsolePosition.Y = StartY + posY;
+            Pos(posX, posY);
 
             switch (currentDirection) {
                 case Direction.UP:
                     Console.Write(PlayerUp);
                     Pos(posX, posY + 1);
-                    Console.Write(" ");
+                    if (hasMoved) Console.Write(" ");
                     break;
                 case Direction.DOWN:
                     Console.WriteLine(PlayerDown);
                     Pos(posX, posY - 1);
-                    Console.Write(" ");
+                    if (hasMoved) Console.Write(" ");
                     break;
                 case Direction.LEFT:
                     Console.WriteLine(PlayerLeft);
                     Pos(posX + 1, posY);
-                    Console.Write(" ");
+                    if (hasMoved) Console.Write(" ");
                     break;
                 case Direction.RIGHT:
                     Console.WriteLine(PlayerRight);
                     Pos(posX - 1, posY);
-                    Console.WriteLine(" ");
+                    if (hasMoved) Console.Write(" ");                    
                     break;
             }
+            hasMoved = false;
             Pos(posX, posY);
         }
-        public bool CheckTileCollisions() {
-            return true;
+        public bool CheckTileCollisions(char[,] map) {     
+            return ((currentDirection == Direction.UP && map[Array2DPosition.Y - 1, Array2DPosition.X] == '█') 
+                || (currentDirection == Direction.DOWN && map[Array2DPosition.Y + 1, Array2DPosition.X] == '█')
+                || (currentDirection == Direction.LEFT && map[Array2DPosition.Y, Array2DPosition.X - 1] == '█') 
+                || (currentDirection == Direction.RIGHT && map[Array2DPosition.Y, Array2DPosition.X + 1] == '█')) ? false : true;
         }
-
-        public ConsoleKey? KeyboardInput() {
-            ConsoleKeyInfo key = Console.ReadKey(true);
-            currentKeyPressed = key.Key;
+        public ConsoleKey? KeyboardInput(ConsoleKeyInfo? keyInfo, char[,] map) {
+            currentKeyPressed = keyInfo.Value.Key;
 
             switch (currentKeyPressed) {
                 case ConsoleKey.W:
-                    if (CheckTileCollisions()) {}
-                    --posY;
                     currentDirection = Direction.UP;
+                    if (CheckTileCollisions(map)) {
+                        --posY;
+                        --Array2DPosition.Y;
+                        hasMoved = true;
+                    }
                     break;
                 case ConsoleKey.S:
-                    ++posY;
                     currentDirection = Direction.DOWN;
+                    if (CheckTileCollisions(map)) {
+                        ++posY;
+                        ++Array2DPosition.Y;
+                        hasMoved = true;
+                    }
                     break;
                 case ConsoleKey.A:
-                    --posX;
                     currentDirection = Direction.LEFT;
+                    if (CheckTileCollisions(map)) {
+                        --posX;
+                        --Array2DPosition.X;
+                        hasMoved = true;
+                    }
                     break;
                 case ConsoleKey.D:
-                    ++posX;
                     currentDirection = Direction.RIGHT;
+                    if (CheckTileCollisions(map)) {
+                        ++posX;
+                        ++Array2DPosition.X;
+                        hasMoved = true;
+                    }
                     break;
                 default:
                     return null;
             }
             return currentKeyPressed;
         }
-        public void Pos(int x, int y) => Console.SetCursorPosition(x + StartX, y + StartY);
-        public enum Direction {
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT
-        }
-    }    
+        public override void Pos(int x, int y) => Console.SetCursorPosition(x + StartX, y + StartY);        
+    }
+    public enum Direction {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
 }
