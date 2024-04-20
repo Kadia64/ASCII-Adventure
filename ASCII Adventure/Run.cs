@@ -20,8 +20,10 @@ namespace ASCII_Adventure {
             UserInterface ui = new UserInterface();            
             Map map = new Map(mapStart);
             Player player = new Player(playerSpawn, mapStart);
-            EntityMapper entityMap = new EntityMapper(map.map);
+
+            EntityMapper entityMap = new EntityMapper(Map.map);
             Console.CursorVisible = false;
+
 
             Thread keysThread = new Thread(() => ReadKeys());
             keysThread.Start();

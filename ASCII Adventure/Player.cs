@@ -64,11 +64,20 @@ namespace ASCII_Adventure {
             hasMoved = false;
             Pos(posX, posY);
         }
-        public bool CheckTileCollisions(char[,] map) {     
+        public bool CheckTileCollisions(char[,] map) {            
             return ((currentDirection == Direction.UP && map[Array2DPosition.Y - 1, Array2DPosition.X] == '█') 
                 || (currentDirection == Direction.DOWN && map[Array2DPosition.Y + 1, Array2DPosition.X] == '█')
                 || (currentDirection == Direction.LEFT && map[Array2DPosition.Y, Array2DPosition.X - 1] == '█') 
-                || (currentDirection == Direction.RIGHT && map[Array2DPosition.Y, Array2DPosition.X + 1] == '█')) ? false : true;
+                || (currentDirection == Direction.RIGHT && map[Array2DPosition.Y, Array2DPosition.X + 1] == '█')
+                || (currentDirection == Direction.UP && map[Array2DPosition.Y - 1, Array2DPosition.X] == '|')
+                || (currentDirection == Direction.DOWN && map[Array2DPosition.Y + 1, Array2DPosition.X] == '|')
+                || (currentDirection == Direction.LEFT && map[Array2DPosition.Y, Array2DPosition.X - 1] == '|') 
+                || (currentDirection == Direction.RIGHT && map[Array2DPosition.Y, Array2DPosition.X + 1] == '|')
+                || (currentDirection == Direction.UP && map[Array2DPosition.Y - 1, Array2DPosition.X] == '-')
+                || (currentDirection == Direction.DOWN && map[Array2DPosition.Y + 1, Array2DPosition.X] == '-')
+                || (currentDirection == Direction.LEFT && map[Array2DPosition.Y, Array2DPosition.X - 1] == '-')
+                || (currentDirection == Direction.RIGHT && map[Array2DPosition.Y, Array2DPosition.X + 1] == '-')
+            ) ? false : true;
         }
         public ConsoleKey? KeyboardInput(ConsoleKeyInfo? keyInfo, char[,] map) {
             currentKeyPressed = keyInfo.Value.Key;
