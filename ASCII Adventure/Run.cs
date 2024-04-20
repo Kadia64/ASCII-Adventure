@@ -17,10 +17,10 @@ namespace ASCII_Adventure {
             Vect mapStart = new Vect(50, 5);
             Vect playerSpawn = new Vect(3, 35);
 
-            UserInterface ui = new UserInterface();
+            UserInterface ui = new UserInterface();            
             Map map = new Map(mapStart);
-
             Player player = new Player(playerSpawn, mapStart);
+            EntityMapper entityMap = new EntityMapper(map.map);
             Console.CursorVisible = false;
 
             Thread keysThread = new Thread(() => ReadKeys());
@@ -28,6 +28,7 @@ namespace ASCII_Adventure {
             int l = 0;
 
             while (true) {
+                var frameColors = new ConsoleColors(map.GameMap);
                 ui.DisplayConsolePosition(player.ConsolePosition);
                 ui.DisplayPlayerPosition(player.MapPosition);
                 ui.DisplayPlayerArrayPosition(player.Array2DPosition);
@@ -37,7 +38,7 @@ namespace ASCII_Adventure {
                     ConsoleKey? keyInput = player.KeyboardInput(lastKey, map.GameMap);
 
                     if ((l % 200) == 0) {
-                        map.RenderFullMap(player.ConsolePosition, player.PlayerSpawnOffset);
+                        map.RenderFullMap(frameColors);
                     }
 
                     player.Draw();

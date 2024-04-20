@@ -37,6 +37,7 @@ namespace ASCII_Adventure {
             ConsolePosition.Y = StartY + posY;
             Pos(posX, posY);
 
+            ConsoleColors.PlayerColor();
             switch (currentDirection) {
                 case Direction.UP:
                     Console.Write(PlayerUp);
@@ -59,6 +60,7 @@ namespace ASCII_Adventure {
                     if (hasMoved) Console.Write(" ");                    
                     break;
             }
+            Console.ResetColor();
             hasMoved = false;
             Pos(posX, posY);
         }

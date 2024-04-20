@@ -11,15 +11,15 @@ namespace ASCII_Adventure {
 
         public void DisplayConsolePosition(Vect position) {
             Pos(0, 0);
-            Console.Write($"x: {position.X}, y: {position.Y}    ");
+            Console.Write($"Console Position: X: {position.X}, Y: {position.Y}    ");
         }
         public void DisplayPlayerPosition(Vect position) {
             Pos(0, 1);
-            Console.Write($"x: {position.X}, y: {position.Y}    ");
+            Console.Write($"Map Position: X: {position.X}, Y: {position.Y}    ");
         }
         public void DisplayPlayerArrayPosition(Vect position) {
             Pos(0, 2);
-            Console.Write($"x: {position.X}, y: {position.Y}    ");
+            Console.Write($"Array Position: X: {position.X}, Y: {position.Y}    ");
         }
         public void DisplayPlayerDirection(Direction direction) {
             Pos(0, 3);
