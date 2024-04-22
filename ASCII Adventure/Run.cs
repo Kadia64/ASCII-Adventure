@@ -21,13 +21,16 @@ namespace ASCII_Adventure {
             Map map = new Map(mapStart);
             Player player = new Player(playerSpawn, mapStart);
 
-            EntityMapper entityMap = new EntityMapper(Map.map);
+            EntityMapper entityMap = new EntityMapper(Map.map, mapStart);
+            entityMap.ClearDrawnEntities();
             Console.CursorVisible = false;
 
 
+            //while (true) { }
+
             Thread keysThread = new Thread(() => ReadKeys());
             keysThread.Start();
-            int l = 0;
+            int frame = 0;
 
             while (true) {
                 var frameColors = new ConsoleColors(map.GameMap);
@@ -35,20 +38,25 @@ namespace ASCII_Adventure {
                 ui.DisplayPlayerPosition(player.MapPosition);
                 ui.DisplayPlayerArrayPosition(player.Array2DPosition);
                 ui.DisplayPlayerDirection(player.currentDirection);
+                ui.TestPrint(entityMap.s_Enemies[4].BorderLeft.ToString(), 4);
+                ui.TestPrint(entityMap.s_Enemies[4].BorderRight.ToString(), 5);
+                ui.TestPrint(entityMap.s_Enemies[4].Array2DPosition.X.ToString() + " " + entityMap.s_Enemies[0].Array2DPosition.Y.ToString(), 6);                
 
                 lock (KeyboardLock) {
                     ConsoleKey? keyInput = player.KeyboardInput(lastKey, map.GameMap);
-
-                    if ((l % 200) == 0) {
+                    
+                    entityMap.UpdateEntityLogic(ref map, player.Array2DPosition, frame);
+                    if ((frame % 200) == 0) {
                         map.RenderFullMap(frameColors);
                     }
+                    for (int i = 0; i < entityMap.s_Enemies.Count; ++i) {
+                        entityMap.s_Enemies[i].Draw();
+                    }
 
-                    player.Draw();
+                    player.Draw();                    
                     lastKey = new ConsoleKeyInfo();
                 }
-
-
-                ++l;
+                ++frame;
             }
 
             /*Thread.Sleep(1000);

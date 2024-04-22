@@ -56,7 +56,7 @@ namespace ASCII_Adventure {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
         }
-        public void S_Color() {
+        public void S_Color() {            
             if (map[Position.Y, Position.X] == 'S') {
                 Console.ForegroundColor = ConsoleColor.Green;
             }

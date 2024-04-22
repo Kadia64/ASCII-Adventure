@@ -29,5 +29,14 @@ namespace ASCII_Adventure {
 
         public override void Pos(int x, int y) => Console.SetCursorPosition(x, y);
 
+
+
+        #region Testing
+        public void TestPrint(string txt, int y) {
+            Pos(0, y);
+            Console.Write(txt);
+        }
+        #endregion
+
     }
 }
